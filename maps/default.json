@@ -1,0 +1,12 @@
+{
+    "start": [1, 1],
+    "goal": [4, 6],
+    "map": [
+      ["asphalt", "asphalt", "asphalt", "grass", "grass", "building", "building", "grass"],
+      ["asphalt", "dirt", "grass", "grass", "asphalt", "asphalt", "asphalt", "building"],
+      ["dirt", "dirt", "asphalt", "grass", "asphalt", "building", "building", "grass"],
+      ["grass", "grass", "grass", "asphalt", "asphalt", "cobblestone", "asphalt", "grass"],
+      ["asphalt", "dirt", "grass", "asphalt", "cobblestone", "asphalt", "asphalt", "asphalt"]
+    ]
+}
+  

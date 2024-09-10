@@ -1,0 +1,26 @@
+{
+  "name": "csi701-heuristic-search",
+  "version": "1.0.0",
+  "description": "Heuristic search in Typescript",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc *.ts --outDir dist",
+    "start": "node dist/index.js",
+    "default": "node dist/index.js maps/default.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iagonuvem/csi701-heuristic-search.git"
+  },
+  "author": "Iago Nuvem & Ana Julia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iagonuvem/csi701-heuristic-search/issues"
+  },
+  "homepage": "https://github.com/iagonuvem/csi701-heuristic-search#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "typescript": "^5.6.2"
+  }
+}
