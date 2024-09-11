@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.aStar = aStar;
 exports.printPath = printPath;
+var heap_1 = require("./heap");
 var AStarNode = /** @class */ (function () {
     function AStarNode(position, gCost, hCost, parent) {
         if (parent === void 0) { parent = null; }
@@ -20,35 +21,39 @@ var AStarNode = /** @class */ (function () {
     return AStarNode;
 }());
 function aStar(start, goal, map, terrainCosts) {
-    var openList = [];
-    var closedList = [];
+    var openList = new heap_1.MinHeap(); // Fila de prioridade
+    var closedList = new Set(); // Conjunto para armazenar nós já visitados
     var startNode = new AStarNode(start, 0, heuristic(start, goal));
-    openList.push(startNode);
-    while (openList.length > 0) {
-        var currentNode = openList.sort(function (a, b) { return a.fCost - b.fCost; })[0];
+    openList.insert(startNode, startNode.fCost);
+    var nodeKey = function (x, y) { return "".concat(x, ",").concat(y); }; // Gera uma chave única para armazenar as coordenadas no closedList
+    while (!openList.isEmpty()) {
+        var currentNode = openList.extractMin();
+        if (!currentNode)
+            continue;
+        // Verifica se chegou ao objetivo
         if (currentNode.position[0] === goal[0] && currentNode.position[1] === goal[1]) {
             return reconstructPath(currentNode);
         }
-        openList.splice(openList.indexOf(currentNode), 1);
-        closedList.push(currentNode);
+        // Adiciona o nó atual à lista de visitados
+        closedList.add(nodeKey(currentNode.position[0], currentNode.position[1]));
         var neighbors = getNeighbors(currentNode.position);
-        var _loop_1 = function (neighborPos) {
+        for (var _i = 0, neighbors_1 = neighbors; _i < neighbors_1.length; _i++) {
+            var neighborPos = neighbors_1[_i];
             var x = neighborPos[0], y = neighborPos[1];
-            // Verifique se o vizinho está dentro dos limites do mapa e se não é um edifício
+            // Verifica se o vizinho está dentro dos limites do mapa e se não é um edifício
             if (x < 0 || y < 0 || x >= map.length || y >= map[0].length || map[x][y] === 'building') {
-                return "continue";
+                continue;
             }
             var terrainCost = terrainCosts[map[x][y]]; // Custo baseado no tipo de terreno
             var gCost = currentNode.gCost + terrainCost;
             var hCost = heuristic(neighborPos, goal);
             var neighborNode = new AStarNode(neighborPos, gCost, hCost, currentNode);
-            if (!closedList.some(function (node) { return node.position[0] === x && node.position[1] === y; })) {
-                openList.push(neighborNode);
+            // Se o vizinho já foi visitado, ignore-o
+            if (closedList.has(nodeKey(x, y))) {
+                continue;
             }
-        };
-        for (var _i = 0, neighbors_1 = neighbors; _i < neighbors_1.length; _i++) {
-            var neighborPos = neighbors_1[_i];
-            _loop_1(neighborPos);
+            // Adiciona o vizinho à fila de prioridade se ele não está na closedList
+            openList.insert(neighborNode, neighborNode.fCost);
         }
     }
     return null; // Caminho não encontrado

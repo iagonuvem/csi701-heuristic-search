@@ -1,3 +1,4 @@
+import { MinHeap } from "./heap";
 import { Terrain } from "./terrain";
 
 class AStarNode {
@@ -19,27 +20,32 @@ class AStarNode {
 }
 
 export function aStar(start: [number, number], goal: [number, number], map: Terrain[][], terrainCosts: Record<Terrain, number>): AStarNode[] | null {
-    const openList: AStarNode[] = [];
-    const closedList: AStarNode[] = [];
+    const openList = new MinHeap<AStarNode>();  // Fila de prioridade
+    const closedList: Set<string> = new Set();  // Conjunto para armazenar nós já visitados
 
     const startNode = new AStarNode(start, 0, heuristic(start, goal));
-    openList.push(startNode);
+    openList.insert(startNode, startNode.fCost);
 
-    while (openList.length > 0) {
-        const currentNode = openList.sort((a, b) => a.fCost - b.fCost)[0];
+    const nodeKey = (x: number, y: number) => `${x},${y}`;  // Gera uma chave única para armazenar as coordenadas no closedList
 
+    while (!openList.isEmpty()) {
+        const currentNode = openList.extractMin();
+
+        if (!currentNode) continue;
+
+        // Verifica se chegou ao objetivo
         if (currentNode.position[0] === goal[0] && currentNode.position[1] === goal[1]) {
             return reconstructPath(currentNode);
         }
 
-        openList.splice(openList.indexOf(currentNode), 1);
-        closedList.push(currentNode);
+        // Adiciona o nó atual à lista de visitados
+        closedList.add(nodeKey(currentNode.position[0], currentNode.position[1]));
 
         const neighbors = getNeighbors(currentNode.position);
         for (const neighborPos of neighbors) {
             const [x, y] = neighborPos;
 
-            // Verifique se o vizinho está dentro dos limites do mapa e se não é um edifício
+            // Verifica se o vizinho está dentro dos limites do mapa e se não é um edifício
             if (x < 0 || y < 0 || x >= map.length || y >= map[0].length || map[x][y] === 'building') {
                 continue;
             }
@@ -49,9 +55,13 @@ export function aStar(start: [number, number], goal: [number, number], map: Terr
             const hCost = heuristic(neighborPos, goal);
             const neighborNode = new AStarNode(neighborPos, gCost, hCost, currentNode);
 
-            if (!closedList.some(node => node.position[0] === x && node.position[1] === y)) {
-                openList.push(neighborNode);
+            // Se o vizinho já foi visitado, ignore-o
+            if (closedList.has(nodeKey(x, y))) {
+                continue;
             }
+
+            // Adiciona o vizinho à fila de prioridade se ele não está na closedList
+            openList.insert(neighborNode, neighborNode.fCost);
         }
     }
 
