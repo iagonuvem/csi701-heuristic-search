@@ -7,7 +7,3 @@ export const terrainCosts: Record<Terrain, number> = {
   cobblestone: 10,
   building: Infinity, // Não pode atravessar
 };
-
-const prisonMap: Terrain[][] = [
-  // Mapa 42x42 representando os tipos de terreno
-];

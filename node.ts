@@ -1,4 +1,4 @@
-import { Terrain, terrainCosts } from "./terrain";
+import { Terrain } from "./terrain";
 
 class AStarNode {
     public position: [number, number];
@@ -18,7 +18,7 @@ class AStarNode {
     }
 }
 
-export function aStar(start: [number, number], goal: [number, number], map: Terrain[][]): AStarNode[] | null {
+export function aStar(start: [number, number], goal: [number, number], map: Terrain[][], terrainCosts: Record<Terrain, number>): AStarNode[] | null {
     const openList: AStarNode[] = [];
     const closedList: AStarNode[] = [];
 
@@ -86,8 +86,16 @@ function reconstructPath(node: AStarNode): AStarNode[] {
     return path.reverse(); // Reverte o caminho para que seja do início ao fim
 }
 
-export function printPath(path: AStarNode[]): void {
-    path.forEach((node) => {
-        console.log(`Mover para: (${node.position[0]}, ${node.position[1]})`);
+export function printPath(path: AStarNode[], map: Terrain[][], terrainCosts: Record<Terrain, number>): void {
+    let totalCost = 0;
+
+    path.forEach((node, index) => {
+        const terrainType = map[node.position[0]][node.position[1]];
+        const movementCost = terrainCosts[terrainType];
+
+        console.log(`Moveu para: (${node.position[0]}, ${node.position[1]}) em ${terrainType} com o custo: ${movementCost}`);
+        totalCost += movementCost;
     });
+
+    console.log(`Custo total do caminho: ${totalCost}`);
 }

@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.aStar = aStar;
 exports.printPath = printPath;
-var terrain_1 = require("./terrain");
 var AStarNode = /** @class */ (function () {
     function AStarNode(position, gCost, hCost, parent) {
         if (parent === void 0) { parent = null; }
@@ -20,7 +19,7 @@ var AStarNode = /** @class */ (function () {
     });
     return AStarNode;
 }());
-function aStar(start, goal, map) {
+function aStar(start, goal, map, terrainCosts) {
     var openList = [];
     var closedList = [];
     var startNode = new AStarNode(start, 0, heuristic(start, goal));
@@ -39,7 +38,7 @@ function aStar(start, goal, map) {
             if (x < 0 || y < 0 || x >= map.length || y >= map[0].length || map[x][y] === 'building') {
                 return "continue";
             }
-            var terrainCost = terrain_1.terrainCosts[map[x][y]]; // Custo baseado no tipo de terreno
+            var terrainCost = terrainCosts[map[x][y]]; // Custo baseado no tipo de terreno
             var gCost = currentNode.gCost + terrainCost;
             var hCost = heuristic(neighborPos, goal);
             var neighborNode = new AStarNode(neighborPos, gCost, hCost, currentNode);
@@ -76,8 +75,13 @@ function reconstructPath(node) {
     }
     return path.reverse(); // Reverte o caminho para que seja do início ao fim
 }
-function printPath(path) {
-    path.forEach(function (node) {
-        console.log("Mover para: (".concat(node.position[0], ", ").concat(node.position[1], ")"));
+function printPath(path, map, terrainCosts) {
+    var totalCost = 0;
+    path.forEach(function (node, index) {
+        var terrainType = map[node.position[0]][node.position[1]];
+        var movementCost = terrainCosts[terrainType];
+        console.log("Moveu para: (".concat(node.position[0], ", ").concat(node.position[1], ") em ").concat(terrainType, " com o custo: ").concat(movementCost));
+        totalCost += movementCost;
     });
+    console.log("Custo total do caminho: ".concat(totalCost));
 }

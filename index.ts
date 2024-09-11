@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { aStar, printPath } from './node';
-import { Terrain } from './terrain';
+import { Terrain, terrainCosts } from './terrain';
 
 let map_path = process.argv[2];
 if (!map_path) {
@@ -17,9 +17,9 @@ function loadConfig(filePath: string): { start: [number, number], goal: [number,
 // Carregar o arquivo de configuração
 const config = loadConfig(map_path);
 
-const path = aStar(config.start, config.goal, config.map);
+const path = aStar(config.start, config.goal, config.map, terrainCosts);
 if (path) {
-    printPath(path);
+    printPath(path, config.map, terrainCosts);
 } else {
     console.log("Caminho não encontrado!");
 }

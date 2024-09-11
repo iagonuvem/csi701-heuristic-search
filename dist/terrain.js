@@ -8,6 +8,3 @@ exports.terrainCosts = {
     cobblestone: 10,
     building: Infinity, // Não pode atravessar
 };
-var prisonMap = [
-// Mapa 42x42 representando os tipos de terreno
-];
