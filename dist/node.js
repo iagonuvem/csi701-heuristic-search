@@ -78,6 +78,6 @@ function reconstructPath(node) {
 }
 function printPath(path) {
     path.forEach(function (node) {
-        console.log("Move to: (".concat(node.position[0], ", ").concat(node.position[1], ")"));
+        console.log("Mover para: (".concat(node.position[0], ", ").concat(node.position[1], ")"));
     });
 }

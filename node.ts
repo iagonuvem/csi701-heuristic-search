@@ -88,6 +88,6 @@ function reconstructPath(node: AStarNode): AStarNode[] {
 
 export function printPath(path: AStarNode[]): void {
     path.forEach((node) => {
-        console.log(`Move to: (${node.position[0]}, ${node.position[1]})`);
+        console.log(`Mover para: (${node.position[0]}, ${node.position[1]})`);
     });
 }
