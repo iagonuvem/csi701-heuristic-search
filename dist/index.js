@@ -16,6 +16,7 @@ function loadConfig(filePath) {
 // Carregar o arquivo de configuração
 var config = loadConfig(map_path);
 var path = (0, node_1.aStar)(config.start, config.goal, config.map, terrain_1.terrainCosts);
+console.log('node', path);
 if (path) {
     (0, node_1.printPath)(path, config.map, terrain_1.terrainCosts);
 }

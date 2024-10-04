@@ -1,0 +1,11 @@
+{
+  "start": [0, 0],
+  "goal": [4, 4],
+  "map": [
+    ["grass", "dirt", "asphalt", "grass", "building"],
+    ["asphalt", "building", "dirt", "grass", "cobblestone"],
+    ["grass", "grass", "building", "dirt", "grass"],
+    ["building", "asphalt", "grass", "grass", "asphalt"],
+    ["dirt", "grass", "asphalt", "cobblestone", "grass"]
+  ]
+}

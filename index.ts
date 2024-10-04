@@ -18,6 +18,7 @@ function loadConfig(filePath: string): { start: [number, number], goal: [number,
 const config = loadConfig(map_path);
 
 const path = aStar(config.start, config.goal, config.map, terrainCosts);
+console.log('node', path);
 if (path) {
     printPath(path, config.map, terrainCosts);
 } else {
